@@ -78,6 +78,8 @@ confusionMatrix(train.test$classe,predict(rf_fit,train.test))
 ```
 From the summary we can see the accuracy of the model and Kappa score's.
 
+Out of sample error rate is denoted by kappa score of 0.9948
+
 #Variable importance
 
 We can find the importance of the variables in determining the model.
