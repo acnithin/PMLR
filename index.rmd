@@ -1,0 +1,98 @@
+---
+title: "Human Activity Recognition"
+author: "Nithen Varghese AC"
+output: html_document
+
+---
+## Abstract
+We attempt to quantify the physical activity of partcipant wearing fitness trackers using RandomForest algorithm
+
+##Enable Parallel Processing.
+Our implementation of randomForest algorithm is compute intensive due to large number of observations. So we can speed up processing using doParallel package
+
+```{r}
+library(doParallel)
+cl <- makeCluster(detectCores())
+registerDoParallel(cl)
+
+```
+
+## Read input files
+
+we read the input files, the training file  "pml-training.csv" and testing file "pml-testing.csv". The input files contain NA,blanks,Nan and Div/0 all of which will impact the model. So these are converted to NA
+
+```{r}
+
+setwd("F:/ML/workspace/PML")
+rawtrain <-read.csv("pml-training.csv",na.strings=c("NA","NaN","","#DIV/0!"))
+rawtest <-read.csv("pml-testing.csv",na.strings=c("NA","NaN","","#DIV/0!"))
+```
+
+Remove columns that are not meaningful for the current analysis like usernames, timestamps and window details
+
+```{r}
+train<- rawtrain[,c(-1,-2,-3,-4,-5,-6,-7)]
+test <-rawtest[,c(-1,-2,-3,-4,-5,-6,-7)]
+
+```
+
+# Remove Columns with NA's
+
+Columns with NA's can impact the model creation time and also reduce the accuracy of the created model. 
+```{r}
+removeNA <- apply(train, 2, function(x) {  sum(is.na(x))})
+train <- train[, which(removeNA == 0)]
+
+```
+
+# Partition Training data
+
+We can split the training data into training and test sets to test the model we created.
+
+```{r}
+library(caret)
+
+trainingIndex  <- createDataPartition(train$classe, p=.80, list=FALSE)
+train.train <- train[ trainingIndex,]
+train.test  <- train[-trainingIndex,]
+
+```
+
+#Model Creation
+
+Using the caret package train function, we can create a model using randomForest method. 
+
+```{r}
+rf_fit <- train(classe ~ .,train.train,method="rf",tuneGrid=data.frame(mtry=3),trControl=trainControl(method="cv"))
+
+
+```
+
+
+
+# Confusion Matrix
+Using the train.test dataset, we can test our model.
+```{r}
+confusionMatrix(train.test$classe,predict(rf_fit,train.test))
+
+```
+From the summary we can see the accuracy of the model and Kappa score's.
+
+#Variable importance
+
+We can find the importance of the variables in determining the model.
+
+```{r}
+varImp(rf_fit)
+
+```
+
+
+# Predicting the test 
+
+We can predict the classes of the provided test set by the below command. 
+```{r}
+predictin <-predict(rf_fit,newdata=test)
+
+```
+
