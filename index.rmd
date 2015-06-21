@@ -68,7 +68,12 @@ rf_fit <- train(classe ~ .,train.train,method="rf",tuneGrid=data.frame(mtry=3),t
 
 ```
 
+Estimating the Out of sample error 
+```{r}
+print(rf_fit$finalModel)
 
+```
+Out of sample is estimated as 0.56
 
 # Confusion Matrix
 Using the train.test dataset, we can test our model.
@@ -78,7 +83,7 @@ confusionMatrix(train.test$classe,predict(rf_fit,train.test))
 ```
 From the summary we can see the accuracy of the model and Kappa score's.
 
-Out of sample error rate is denoted by kappa score of 0.9948
+Out of sample Accuracy rate is 99.57% and error rate is identified as .428%
 
 #Variable importance
 

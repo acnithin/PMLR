@@ -113,6 +113,24 @@ train.test  &lt;- train[-trainingIndex,]</code></pre>
 <pre><code>## Loading required package: randomForest
 ## randomForest 4.6-10
 ## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<p>Estimating the Out of sample error</p>
+<pre class="r"><code>print(rf_fit$finalModel)</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(x = x, y = y, mtry = param$mtry) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 3
+## 
+##         OOB estimate of  error rate: 0.48%
+## Confusion matrix:
+##      A    B    C    D    E  class.error
+## A 4463    0    0    0    1 0.0002240143
+## B   12 3022    4    0    0 0.0052666228
+## C    0   17 2720    1    0 0.0065741417
+## D    0    0   31 2541    1 0.0124368442
+## E    0    0    3    5 2878 0.0027720028</code></pre>
+<p>Out of sample is estimated as 0.48%</p>
 </div>
 <div id="confusion-matrix" class="section level1">
 <h1>Confusion Matrix</h1>
@@ -122,35 +140,35 @@ train.test  &lt;- train[-trainingIndex,]</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1116    0    0    0    0
-##          B    2  756    1    0    0
-##          C    0    6  678    0    0
-##          D    0    0    6  636    1
-##          E    0    0    0    1  720
+##          A 1114    2    0    0    0
+##          B    4  754    1    0    0
+##          C    0    5  679    0    0
+##          D    0    0    9  633    1
+##          E    0    0    1    0  720
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9957          
-##                  95% CI : (0.9931, 0.9975)
+##                Accuracy : 0.9941          
+##                  95% CI : (0.9912, 0.9963)
 ##     No Information Rate : 0.285           
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.9945          
+##                   Kappa : 0.9926          
 ##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9982   0.9921   0.9898   0.9984   0.9986
-## Specificity            1.0000   0.9991   0.9981   0.9979   0.9997
-## Pos Pred Value         1.0000   0.9960   0.9912   0.9891   0.9986
-## Neg Pred Value         0.9993   0.9981   0.9978   0.9997   0.9997
-## Prevalence             0.2850   0.1942   0.1746   0.1624   0.1838
-## Detection Rate         0.2845   0.1927   0.1728   0.1621   0.1835
+## Sensitivity            0.9964   0.9908   0.9841   1.0000   0.9986
+## Specificity            0.9993   0.9984   0.9985   0.9970   0.9997
+## Pos Pred Value         0.9982   0.9934   0.9927   0.9844   0.9986
+## Neg Pred Value         0.9986   0.9978   0.9966   1.0000   0.9997
+## Prevalence             0.2850   0.1940   0.1759   0.1614   0.1838
+## Detection Rate         0.2840   0.1922   0.1731   0.1614   0.1835
 ## Detection Prevalence   0.2845   0.1935   0.1744   0.1639   0.1838
-## Balanced Accuracy      0.9991   0.9956   0.9940   0.9981   0.9992</code></pre>
+## Balanced Accuracy      0.9979   0.9946   0.9913   0.9985   0.9992</code></pre>
 <p>From the summary we can see the accuracy of the model and Kappa score’s.</p>
-<p>Out of sample error rate is denoted by kappa score of 0.9945</p>
+<p>Out of sample Accuracy rate is 99.41% and error rate is identified as .588%</p>
 </div>
 <div id="variable-importance" class="section level1">
 <h1>Variable importance</h1>
@@ -162,25 +180,25 @@ train.test  &lt;- train[-trainingIndex,]</code></pre>
 ## 
 ##                      Overall
 ## roll_belt             100.00
-## yaw_belt               77.30
-## magnet_dumbbell_z      65.86
-## magnet_dumbbell_y      61.57
-## pitch_belt             59.71
-## pitch_forearm          58.16
-## roll_forearm           50.45
-## magnet_dumbbell_x      50.07
-## magnet_belt_z          40.21
-## accel_dumbbell_y       38.42
-## accel_belt_z           37.93
-## roll_dumbbell          37.52
-## magnet_belt_y          36.12
-## accel_dumbbell_z       32.04
-## roll_arm               31.21
-## accel_forearm_x        29.60
-## gyros_belt_z           29.36
-## accel_dumbbell_x       25.11
-## total_accel_dumbbell   24.92
-## gyros_dumbbell_y       24.86</code></pre>
+## yaw_belt               79.11
+## magnet_dumbbell_z      69.83
+## pitch_forearm          63.55
+## pitch_belt             61.81
+## magnet_dumbbell_y      61.04
+## roll_forearm           54.06
+## magnet_dumbbell_x      50.98
+## magnet_belt_y          40.82
+## magnet_belt_z          40.57
+## accel_belt_z           40.00
+## roll_dumbbell          40.00
+## accel_dumbbell_y       39.81
+## accel_dumbbell_z       35.67
+## roll_arm               30.40
+## accel_forearm_x        30.25
+## gyros_belt_z           29.42
+## total_accel_dumbbell   26.40
+## yaw_dumbbell           25.59
+## accel_dumbbell_x       25.12</code></pre>
 </div>
 <div id="predicting-the-test" class="section level1">
 <h1>Predicting the test</h1>
